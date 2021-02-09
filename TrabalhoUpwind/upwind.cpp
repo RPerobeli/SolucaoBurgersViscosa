@@ -20,9 +20,9 @@ Upwind::Upwind(float theta)
     }
     case(1):
     {
-        //cout<<"Valor de Beta para FSLS: "<<endl;
-        //cin >> this->beta;
-        beta= 1.5;
+        cout<<"Valor de Beta para FSLS: "<<endl;
+        cin >> this->beta;
+        //beta= 1.5;
         break;
     }
     case(2):

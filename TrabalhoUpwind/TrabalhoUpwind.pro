@@ -17,7 +17,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
     burgers_viscosa.cpp \
-    upwind.cpp
+    upwind.cpp \
+    adveccao_linear.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -26,4 +27,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     burgers_viscosa.h \
-    upwind.h
+    upwind.h \
+    adveccao_linear.h
