@@ -104,12 +104,13 @@ MatrixXf Adveccao_Linear::CalculaEquacao(VectorXf X)
         case(1):
         {
             cout<<"FSLS"<<endl;
-            int t = 0;
+            double t = 0;
             for(int n=0; n<U.rows()-1;n++)
             {
                 t += delta_t;
                 system("CLS");
                 cout << t << endl;
+                //cout << delta_t << endl;
                 for(int i=1; i<U.cols()-1;i++)
                 {
                     //loop do espaço
