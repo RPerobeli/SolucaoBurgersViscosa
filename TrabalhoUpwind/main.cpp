@@ -4,6 +4,7 @@
 #include <math.h>
 #include <iostream>
 #include "burgers_viscosa.h"
+#include "adveccao_linear.h"
 #include "upwind.h"
 
 
@@ -69,55 +70,115 @@ int main()
 
     FILE *arquivo;
 
+
+    int qualEquacao = 0;
     while(true)
     {
-        Burgers_Viscosa Equacao;
+        cout<<"Qual equacao deseja resolver?"<<endl;
+        cout<<"1 - Burgers Viscosa"<<endl;
+        cout<<"2 - Adveccao Linear"<<endl;
+        cin >> qualEquacao;
 
-        Equacao.contornoInicio = 0;
-        Equacao.contornoFim = 0;
-
-        Equacao.cont_t= floor(Equacao.tempo/Equacao.delta_t)+1;
-        Equacao.contX = floor(Equacao.comprimento/Equacao.deltaX)+1;
-
-
-
-        VectorXf X(Equacao.contX);
-        VectorXf tempo(Equacao.cont_t);
-
-        for(int c=0;c<X.rows();c++)
+        if(qualEquacao == 1)
         {
-            //inicia o vetor X com a posição de cada nó do dominio 1D com a borda esquerda sendo a coordenada 0
-            if(c==0)
-            {
-                X[c]=0;
+            Burgers_Viscosa Equacao;
 
-            }else
-            {
-                X[c]=X[c-1]+Equacao.deltaX;
+            Equacao.contornoInicio = 0;
+            Equacao.contornoFim = 0;
 
+            Equacao.cont_t= floor(Equacao.tempo/Equacao.delta_t)+1;
+            Equacao.contX = floor(Equacao.comprimento/Equacao.deltaX)+1;
+
+
+
+            VectorXf X(Equacao.contX);
+            VectorXf tempo(Equacao.cont_t);
+
+            for(int c=0;c<X.rows();c++)
+            {
+                //inicia o vetor X com a posição de cada nó do dominio 1D com a borda esquerda sendo a coordenada 0
+                if(c==0)
+                {
+                    X[c]=0;
+
+                }else
+                {
+                    X[c]=X[c-1]+Equacao.deltaX;
+
+                }
             }
-        }
 
-        for(int c=0;c<tempo.rows();c++)
+            for(int c=0;c<tempo.rows();c++)
+            {
+                //inicia o vetor tempo com a posição de cada nó no decorrer do tempo
+                if(c==0)
+                {
+                    tempo[c]=0;
+
+                }else
+                {
+                    tempo[c]=tempo[c-1]+Equacao.delta_t;
+
+                }
+            }
+
+            MatrixXf solucao = Equacao.CalculaEquacao(X);
+            cout <<solucao.rows()<<"x"<<solucao.cols()<<endl;
+            //ImprimeMatriz(solucao);
+
+            SalvaArquivo(solucao, arquivo, tempo, X);
+            SalvaArquivoSemTempo(solucao, arquivo, X);
+        }
+        if(qualEquacao == 2)
         {
-            //inicia o vetor tempo com a posição de cada nó no decorrer do tempo
-            if(c==0)
-            {
-                tempo[c]=0;
+            Adveccao_Linear Equacao;
 
-            }else
-            {
-                tempo[c]=tempo[c-1]+Equacao.delta_t;
+            Equacao.contornoInicio = 0;
+            Equacao.contornoFim = 0;
 
+            Equacao.cont_t= floor(Equacao.tempo/Equacao.delta_t)+1;
+            Equacao.contX = floor(Equacao.comprimento/Equacao.deltaX)+1;
+
+
+
+            VectorXf X(Equacao.contX);
+            VectorXf tempo(Equacao.cont_t);
+
+            for(int c=0;c<X.rows();c++)
+            {
+                //inicia o vetor X com a posição de cada nó do dominio 1D com a borda esquerda sendo a coordenada 0
+                if(c==0)
+                {
+                    X[c]=0;
+
+                }else
+                {
+                    X[c]=X[c-1]+Equacao.deltaX;
+
+                }
             }
+
+            for(int c=0;c<tempo.rows();c++)
+            {
+                //inicia o vetor tempo com a posição de cada nó no decorrer do tempo
+                if(c==0)
+                {
+                    tempo[c]=0;
+
+                }else
+                {
+                    tempo[c]=tempo[c-1]+Equacao.delta_t;
+
+                }
+            }
+
+            MatrixXf solucao = Equacao.CalculaEquacao(X);
+            cout <<solucao.rows()<<"x"<<solucao.cols()<<endl;
+            //ImprimeMatriz(solucao);
+
+            SalvaArquivo(solucao, arquivo, tempo, X);
+            SalvaArquivoSemTempo(solucao, arquivo, X);
         }
-
-        MatrixXf solucao = Equacao.CalculaEquacao(X);
-        cout <<solucao.rows()<<"x"<<solucao.cols()<<endl;
-        //ImprimeMatriz(solucao);
-
-        SalvaArquivo(solucao, arquivo, tempo, X);
-        SalvaArquivoSemTempo(solucao, arquivo, X);
     }
     //return a.exec();
     return 0;

@@ -17,7 +17,7 @@ Burgers_Viscosa::Burgers_Viscosa()
     this->comprimento = 1;
     //cout<<"Passo em X: "<<endl;
     //cin >> this->deltaX;
-    this->deltaX=0.01;
+    this->deltaX=0.0025;
     cout<<"Tempo total: "<<endl;
     cin >> this->tempo;
     //this->tempo = 0.5
