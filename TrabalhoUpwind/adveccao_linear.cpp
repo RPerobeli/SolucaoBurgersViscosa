@@ -89,7 +89,7 @@ MatrixXf Adveccao_Linear::CalculaEquacao(VectorXf X)
 
     //começando o calculo
 
-    float uBarra_f = 0, uBarra_g = 0;
+    double uBarra_f = 0, uBarra_g = 0;
 
     Upwind upwind(theta);
     Vector2f u_gf = {0,0};
@@ -114,12 +114,12 @@ MatrixXf Adveccao_Linear::CalculaEquacao(VectorXf X)
                 for(int i=1; i<U.cols()-1;i++)
                 {
                     //loop do espaço
-                    uBarra_f = 2;
-                    uBarra_g = 2;
+                    uBarra_f = 1;
+                    uBarra_g = 1;
 
                     u_gf = upwind.FSLS(U,n,i, u_gf,uBarra_f,uBarra_g);
-                    float p1 = 0.5*delta_t*(1.0/deltaX)*(uBarra_f* u_gf(1) - uBarra_g * u_gf(0));
-                    //float p2 = (delta_t*visc/ (deltaX*deltaX))*(U(n,i+1)-2.0*U(n,i) + U(n,i-1));
+                    double p1 = delta_t*(1.0/deltaX)*(uBarra_f* u_gf(1) - uBarra_g * u_gf(0));
+                    //double p2 = (delta_t*visc/ (deltaX*deltaX))*(U(n,i+1)-2.0*U(n,i) + U(n,i-1));
                     U(n+1,i)= U(n,i) - p1;
 
                 }
@@ -130,17 +130,20 @@ MatrixXf Adveccao_Linear::CalculaEquacao(VectorXf X)
         case(2):
         {
             cout << "ADBQUICKEST"<<endl;
+            double t = 0;
             for(int n=0; n<U.rows()-1;n++)
             {
+                t += delta_t;
+                system("CLS");
+                cout << t << endl;
                 for(int i=1; i<U.cols()-1;i++)
                 {
                     //loop do espaço
-                    uBarra_f = 2;
-                    uBarra_g = 2;
-
+                    uBarra_f = 1;
+                    uBarra_g = 1;
                     u_gf = upwind.ADBQUICKEST(U,n,i, u_gf,uBarra_f, uBarra_g,theta);
 
-                    U(n+1,i)= U(n,i) - 0.5*delta_t*(1.0/deltaX)*(uBarra_f* u_gf(1) - uBarra_g * u_gf(0)); //+ (delta_t*visc/ (deltaX*deltaX))*(U(n,i+1) - 2*U(n,i) + U(n,i-1));
+                    U(n+1,i)= U(n,i) - delta_t*(1.0/deltaX)*(uBarra_f* u_gf(1) - uBarra_g* u_gf(0)); //+ (delta_t*visc/ (deltaX*deltaX))*(U(n,i+1) - 2*U(n,i) + U(n,i-1));
 
                 }
             }

@@ -4,7 +4,7 @@ using namespace Eigen;
 using namespace std;
 
 
-Upwind::Upwind(float theta)
+Upwind::Upwind(double theta)
 {
     //construtor
     cout<< "1 = FSLS " <<endl;
@@ -27,18 +27,18 @@ Upwind::Upwind(float theta)
     }
     case(2):
     {
-        float num_a = 2-3*abs(theta)+theta*theta;
-        float den_a = 7 - 6*theta- 3*abs(theta)+ 2*theta*theta;
+        double num_a = 2-3*abs(theta)+theta*theta;
+        double den_a = 7 - 6*theta- 3*abs(theta)+ 2*theta*theta;
         this->a = num_a/den_a;
 
-        float num_b = -4+6*theta- 3*abs(theta)+ theta*theta;
-        float den_b = -5+ 6*theta - 3*abs(theta) + 2*theta*theta;
+        double num_b = -4+6*theta- 3*abs(theta)+ theta*theta;
+        double den_b = -5+ 6*theta - 3*abs(theta) + 2*theta*theta;
         this->b = num_b/den_b;
     }
     }
 }
 
-Vector2f Upwind::ADBQUICKEST(MatrixXf M, int i, int j, Vector2f v,float u_f, float u_g, float theta) //v[0] é u_g e v[1] é u_f /i=cont no tempo e j=cont no espaço
+Vector2f Upwind::ADBQUICKEST(MatrixXf M, int i, int j, Vector2f v,double u_f, double u_g, double theta) //v[0] é u_g e v[1] é u_f /i=cont no tempo e j=cont no espaço
 {
 
     //calcula as propriedade convectada
@@ -50,21 +50,21 @@ Vector2f Upwind::ADBQUICKEST(MatrixXf M, int i, int j, Vector2f v,float u_f, flo
             v(0)= 0.5*(M(i,j-1)+M(i,j));
         }else
         {
-            float phi_chapeu = (M(i,j-1)-M(i,j-2))/(M(i,j)-M(i,j-2));
+            double phi_chapeu = (M(i,j-1)-M(i,j-2))/(M(i,j)-M(i,j-2));
             if(phi_chapeu<0 || 1<phi_chapeu)
             {
                 v(0)= M(i,j-1);
             }else if(phi_chapeu>=0 && phi_chapeu<a)
             {
-                float A = (2-theta)*phi_chapeu;
+                double A = (2-theta)*phi_chapeu;
                 v(0) = M(i,j-2) + (M(i,j)-M(i,j-2))*A;
             }else if(phi_chapeu>=a && phi_chapeu<=b)
             {
-                float A = phi_chapeu+0.5*(1-abs(theta))-(1/6)*(1-theta*theta)*(1-2*phi_chapeu);
+                double A = phi_chapeu+0.5*(1-abs(theta))*(1-phi_chapeu)-(1/6)*(1-theta*theta)*(1-2*phi_chapeu);
                 v(0) = M(i,j-2) + (M(i,j)-M(i,j-2))*A;
             }else if(phi_chapeu>b && phi_chapeu<=1)
             {
-                float A = 1-theta+theta*phi_chapeu;
+                double A = 1-theta+theta*phi_chapeu;
                 v(0) = M(i,j-2) + (M(i,j)-M(i,j-2))*A;
             }
         }
@@ -78,21 +78,21 @@ Vector2f Upwind::ADBQUICKEST(MatrixXf M, int i, int j, Vector2f v,float u_f, flo
             v(0) = M(i,j);
         }else
         {
-            float phi_chapeu = (M(i,j)-M(i,j+1))/(M(i,j-1)-M(i,j+1));
+            double phi_chapeu = (M(i,j)-M(i,j+1))/(M(i,j-1)-M(i,j+1));
             if(phi_chapeu<0 || 1<phi_chapeu)
             {
                 v(0)= M(i,j);
             }else if(phi_chapeu>=0 && phi_chapeu<a)
             {
-                float A = (2-theta)*phi_chapeu;
+                double A = (2-theta)*phi_chapeu;
                 v(0) = M(i,j+1) + (M(i,j-1)-M(i,j+1))*A;
             }else if(phi_chapeu>=a && phi_chapeu<=b)
             {
-                float A = phi_chapeu+0.5*(1-abs(theta))-(1/6)*(1-theta*theta)*(1-2*phi_chapeu);
+                double A = phi_chapeu+0.5*(1-abs(theta))*(1-phi_chapeu)-(1/6)*(1-theta*theta)*(1-2*phi_chapeu);
                 v(0) = M(i,j+1) + (M(i,j-1)-M(i,j+1))*A;
             }else if(phi_chapeu>b && phi_chapeu<=1)
             {
-                float A = 1-theta+theta*phi_chapeu;
+                double A = 1-theta+theta*phi_chapeu;
                 v(0) = M(i,j+1) + (M(i,j-1)-M(i,j+1))*A;
             }
         }
@@ -106,21 +106,21 @@ Vector2f Upwind::ADBQUICKEST(MatrixXf M, int i, int j, Vector2f v,float u_f, flo
             v(1)= M(i,j);
         }else
         {
-            float phi_chapeu = (M(i,j)-M(i,j-1))/(M(i,j+1)-M(i,j-1));
+            double phi_chapeu = (M(i,j)-M(i,j-1))/(M(i,j+1)-M(i,j-1));
             if(phi_chapeu<0 || 1<phi_chapeu)
             {
                 v(1)= M(i,j);
             }else if(phi_chapeu>=0 && phi_chapeu<a)
             {
-                float A = (2-theta)*phi_chapeu;
+                double A = (2-theta)*phi_chapeu;
                 v(1) = M(i,j-1) + (M(i,j+1)-M(i,j-1))*A;
             }else if(phi_chapeu>=a && phi_chapeu<=b)
             {
-                float A = phi_chapeu+0.5*(1-abs(theta))-(1/6)*(1-theta*theta)*(1-2*phi_chapeu);
+                double A = phi_chapeu+0.5*(1-abs(theta))*(1-phi_chapeu)-(1/6)*(1-theta*theta)*(1-2*phi_chapeu);
                 v(1) = M(i,j-1) + (M(i,j+1)-M(i,j-1))*A;
             }else if(phi_chapeu>b && phi_chapeu<=1)
             {
-                float A = 1-theta+theta*phi_chapeu;
+                double A = 1-theta+theta*phi_chapeu;
                 v(1) = M(i,j-1) + (M(i,j+1)-M(i,j-1))*A;
             }
         }
@@ -134,21 +134,21 @@ Vector2f Upwind::ADBQUICKEST(MatrixXf M, int i, int j, Vector2f v,float u_f, flo
             v(1)= 0.5*(M(i,j-1)+M(i,j+1));
         }else
         {
-            float phi_chapeu = (M(i,j+1)-M(i,j+2))/(M(i,j)-M(i,j+2));
+            double phi_chapeu = (M(i,j+1)-M(i,j+2))/(M(i,j)-M(i,j+2));
             if(phi_chapeu<0 || 1<phi_chapeu)
             {
                 v(1)= M(i,j+1);
             }else if(phi_chapeu>=0 && phi_chapeu<a)
             {
-                float A = (2-theta)*phi_chapeu;
+                double A = (2-theta)*phi_chapeu;
                 v(1) = M(i,j+2) + (M(i,j)-M(i,j+2))*A;
             }else if(phi_chapeu>=a && phi_chapeu<=b)
             {
-                float A = phi_chapeu+0.5*(1-abs(theta))-(1/6)*(1-theta*theta)*(1-2*phi_chapeu);
+                double A = phi_chapeu+0.5*(1-abs(theta))*(1-phi_chapeu)-(1/6)*(1-theta*theta)*(1-2*phi_chapeu);
                 v(1) = M(i,j+2) + (M(i,j)-M(i,j+2))*A;
             }else if(phi_chapeu>b && phi_chapeu<=1)
             {
-                float A = 1-theta+theta*phi_chapeu;
+                double A = 1-theta+theta*phi_chapeu;
                 v(1) = M(i,j+2) + (M(i,j)-M(i,j+2))*A;
             }
         }
@@ -157,7 +157,7 @@ Vector2f Upwind::ADBQUICKEST(MatrixXf M, int i, int j, Vector2f v,float u_f, flo
     return v;
 }
 
-Vector2f Upwind::FSLS(MatrixXf M, int i, int j, Vector2f v,float u_f, float u_g)
+Vector2f Upwind::FSLS(MatrixXf M, int i, int j, Vector2f v,double u_f, double u_g)
 {
 
     //verifica em qual caso a variavel convectada se encontra
@@ -174,13 +174,13 @@ Vector2f Upwind::FSLS(MatrixXf M, int i, int j, Vector2f v,float u_f, float u_g)
                 v(0)= M(i,j-1);
             }else
             {
-                float phi_chapeu = (M(i,j-1)-M(i,j-2))/(M(i,j)-M(i,j-2));
+                double phi_chapeu = (M(i,j-1)-M(i,j-2))/(M(i,j)-M(i,j-2));
                 if(phi_chapeu<0.0 || 1.0<phi_chapeu)
                 {
                     v(0)= M(i,j-1);
                 }else
                 {
-                    float A = (-2.0*beta+4.0)*pow(phi_chapeu,4.0) + (4.0*beta-8.0)*pow(phi_chapeu,3.0)+ ((-5.0*beta+8.0)/2.0)*pow(phi_chapeu,2.0)+ ((beta+2.0)/2.0)*phi_chapeu;
+                    double A = (-2.0*beta+4.0)*pow(phi_chapeu,4.0) + (4.0*beta-8.0)*pow(phi_chapeu,3.0)+ ((-5.0*beta+8.0)/2.0)*pow(phi_chapeu,2.0)+ ((beta+2.0)/2.0)*phi_chapeu;
                     v(0) = M(i,j-2) + (M(i,j)-M(i,j-2))*A;
                 }
             }
@@ -195,13 +195,13 @@ Vector2f Upwind::FSLS(MatrixXf M, int i, int j, Vector2f v,float u_f, float u_g)
             v(0)= M(i,j);
         }else
         {
-            float phi_chapeu = (M(i,j)-M(i,j+1))/(M(i,j-1)-M(i,j+1));
+            double phi_chapeu = (M(i,j)-M(i,j+1))/(M(i,j-1)-M(i,j+1));
             if(phi_chapeu<0.0 || 1.0<phi_chapeu)
             {
                 v(0)= M(i,j);
             }else
             {
-                float A = (-2.0*beta+4.0)*pow(phi_chapeu,4.0) + (4.0*beta-8.0)*pow(phi_chapeu,3.0)+ ((-5.0*beta+8.0)/2.0)*pow(phi_chapeu,2.0)+ ((beta+2.0)/2.0)*phi_chapeu;
+                double A = (-2.0*beta+4.0)*pow(phi_chapeu,4.0) + (4.0*beta-8.0)*pow(phi_chapeu,3.0)+ ((-5.0*beta+8.0)/2.0)*pow(phi_chapeu,2.0)+ ((beta+2.0)/2.0)*phi_chapeu;
                 v(0) = M(i,j+1) + (M(i,j-1)-M(i,j+1))*A;
             }
         }
@@ -214,13 +214,13 @@ Vector2f Upwind::FSLS(MatrixXf M, int i, int j, Vector2f v,float u_f, float u_g)
             v(1)= M(i,j);
         }else
         {
-            float phi_chapeu = (M(i,j)-M(i,j-1))/(M(i,j+1)-M(i,j-1));
+            double phi_chapeu = (M(i,j)-M(i,j-1))/(M(i,j+1)-M(i,j-1));
             if(phi_chapeu<0 || 1<phi_chapeu)
             {
                 v(1)= M(i,j);
             }else
             {
-                float A = (-2.0*beta+4.0)*pow(phi_chapeu,4.0) + (4.0*beta-8.0)*pow(phi_chapeu,3.0)+ ((-5.0*beta+8.0)/2.0)*pow(phi_chapeu,2.0)+ ((beta+2.0)/2.0)*phi_chapeu;
+                double A = (-2.0*beta+4.0)*pow(phi_chapeu,4.0) + (4.0*beta-8.0)*pow(phi_chapeu,3.0)+ ((-5.0*beta+8.0)/2.0)*pow(phi_chapeu,2.0)+ ((beta+2.0)/2.0)*phi_chapeu;
                 v(1) = M(i,j-1) + (M(i,j+1)-M(i,j-1))*A;
             }
         }
@@ -237,13 +237,13 @@ Vector2f Upwind::FSLS(MatrixXf M, int i, int j, Vector2f v,float u_f, float u_g)
                 v(1)= M(i,j+1);
             }else
             {
-                float phi_chapeu = (M(i,j+1)-M(i,j+2))/(M(i,j)-M(i,j+2));
+                double phi_chapeu = (M(i,j+1)-M(i,j+2))/(M(i,j)-M(i,j+2));
                 if(phi_chapeu<0.0 || 1.0<phi_chapeu)
                 {
                     v(1)= M(i,j+1);
                 }else
                 {
-                    float A = (-2.0*beta+4.0)*pow(phi_chapeu,4.0) + (4.0*beta-8.0)*pow(phi_chapeu,3.0)+ ((-5.0*beta+8.0)/2.0)*pow(phi_chapeu,2.0)+ ((beta+2.0)/2.0)*phi_chapeu;
+                    double A = (-2.0*beta+4.0)*pow(phi_chapeu,4.0) + (4.0*beta-8.0)*pow(phi_chapeu,3.0)+ ((-5.0*beta+8.0)/2.0)*pow(phi_chapeu,2.0)+ ((beta+2.0)/2.0)*phi_chapeu;
                     v(1) = M(i,j+2) + (M(i,j)-M(i,j+2))*A;
                 }
             }

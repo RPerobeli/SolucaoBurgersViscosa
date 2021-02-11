@@ -1,4 +1,4 @@
-//#include <QCoreApplication>
+#include <QCoreApplication>
 #include "../Eigen/Eigen/Dense"
 #include <stdlib.h>
 #include <math.h>
@@ -63,10 +63,10 @@ void SalvaArquivoSemTempo(MatrixXf M, FILE *arquivo, VectorXf X)
 }
 
 
-//int main(int argc, char *argv[])
-int main()
+int main(int argc, char *argv[])
+//int main()
 {
-    //QCoreApplication a(argc, argv);
+    QCoreApplication a(argc, argv);
 
     FILE *arquivo;
 
@@ -180,6 +180,6 @@ int main()
             SalvaArquivoSemTempo(solucao, arquivo, X);
         }
     }
-    //return a.exec();
-    return 0;
+    return a.exec();
+//    return 0;
 }

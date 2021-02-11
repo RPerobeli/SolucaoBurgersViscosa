@@ -12,7 +12,7 @@ class Burgers_Viscosa
   private:
   public:
     //VARIAVEIS
-    float visc,
+    double visc,
           deltaX,
           delta_t,
           comprimento,

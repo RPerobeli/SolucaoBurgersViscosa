@@ -37,7 +37,7 @@ MatrixXf Burgers_Viscosa::CalculaEquacao(VectorXf X)
 
     //começando o calculo
 
-    float uBarra_f = 0, uBarra_g = 0;
+    double uBarra_f = 0, uBarra_g = 0;
 
     Upwind upwind(theta);
     Vector2f u_gf = {0,0};
@@ -61,8 +61,8 @@ MatrixXf Burgers_Viscosa::CalculaEquacao(VectorXf X)
                     uBarra_g = (U(n,i)+U(n,i-1))*0.5;
 
                     u_gf = upwind.FSLS(U,n,i, u_gf,uBarra_f,uBarra_g);
-                    float p1 = 0.5*delta_t*(1.0/deltaX)*(uBarra_f* u_gf(1) - uBarra_g * u_gf(0));
-                    float p2 = (delta_t*visc/ (deltaX*deltaX))*(U(n,i+1)-2.0*U(n,i) + U(n,i-1));
+                    double p1 = 0.5*delta_t*(1.0/deltaX)*(uBarra_f* u_gf(1) - uBarra_g * u_gf(0));
+                    double p2 = (delta_t*visc/ (deltaX*deltaX))*(U(n,i+1)-2.0*U(n,i) + U(n,i-1));
                     U(n+1,i)= U(n,i) - p1 +  p2;
 
                 }

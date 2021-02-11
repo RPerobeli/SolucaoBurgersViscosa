@@ -10,7 +10,7 @@ using namespace std;
 class Adveccao_Linear
 {
 public:
-    float visc,
+    double visc,
           deltaX,
           delta_t,
           comprimento,

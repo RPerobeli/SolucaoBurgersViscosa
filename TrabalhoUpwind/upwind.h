@@ -12,14 +12,14 @@ private:
 public:
     //VARIAVEIS
     int tipoDeUpwind=0;
-    float beta=0;
-    float a=0,b=0;
-    float threshold=1.0e-14;
+    double beta=0;
+    double a=0,b=0;
+    double threshold=1.0e-14;
 
     //FUNÇOES
-    Upwind(float theta);
-    Vector2f ADBQUICKEST(MatrixXf M, int i, int j, Vector2f v,float u_f, float u_g, float theta);
-    Vector2f FSLS(MatrixXf M, int i, int j, Vector2f v,float u_f, float u_g);
+    Upwind(double theta);
+    Vector2f ADBQUICKEST(MatrixXf M, int i, int j, Vector2f v,double u_f, double u_g, double theta);
+    Vector2f FSLS(MatrixXf M, int i, int j, Vector2f v,double u_f, double u_g);
 
 };
 
